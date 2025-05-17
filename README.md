@@ -14,7 +14,7 @@ A lightweight TypeScript wrapper for the amqplib package that simplifies working
 ## Installation
 
 ```bash
-pnpm add @your-org/consumer-library
+pnpm add @snapstack/rabbitmq
 ```
 
 ## Usage
@@ -22,7 +22,7 @@ pnpm add @your-org/consumer-library
 ### Basic Setup
 
 ```typescript
-import { RabbitMQ } from '@your-org/consumer-library';
+import { RabbitMQ } from '@snapstack/rabbitmq';
 
 // Create a new RabbitMQ instance
 const rabbit = new RabbitMQ({
