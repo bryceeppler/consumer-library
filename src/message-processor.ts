@@ -1,4 +1,3 @@
-// src/messageProcessor.ts
 import { BaseMessage, MessageHandlers } from './types';
 import { RabbitMQService } from './rabbitmq-service';
 
@@ -19,7 +18,6 @@ export class MessageProcessor {
 
     if (!handler) {
       console.warn('MessageProcessor: No handler found for message type:', message.type);
-      // Optionally handle unknown types (e.g., dead-letter queue)
       return;
     }
 
@@ -29,7 +27,6 @@ export class MessageProcessor {
       });
     } catch (error) {
       console.error(`MessageProcessor: Error processing message of type ${message.type}:`, error);
-      // Implement error handling (e.g., retry, dead-letter queue)
     }
   }
 }

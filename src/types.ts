@@ -2,7 +2,7 @@ import { RabbitMQService } from './rabbitmq-service';
 
 export interface RabbitMQConfig {
   url: string;
-  queueA: string;
+  consumerQueue: string;
   queuesToAssert: string[];
 }
 

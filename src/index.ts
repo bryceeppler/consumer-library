@@ -1,4 +1,3 @@
-// src/index.ts
 import { RabbitMQService } from './rabbitmq-service';
 import { MessageProcessor } from './message-processor';
 import { RabbitMQConfig, BaseMessage, MessageHandlers } from './types';
@@ -6,7 +5,7 @@ import amqp from 'amqplib';
 
 export interface ConsumerLibConfig {
   rabbitmq: RabbitMQConfig;
-  messageHandlers: MessageHandlers; // The map of message type to handler functions
+  messageHandlers: MessageHandlers;
 }
 
 export class ConsumerLib {
@@ -27,7 +26,7 @@ export class ConsumerLib {
     await this.rabbitMQService.connect();
 
     await this.rabbitMQService.consume(
-      this.config.rabbitmq.queueA,
+      this.config.rabbitmq.consumerQueue,
       async (msg: amqp.ConsumeMessage | null) => {
         if (msg !== null) {
           try {
@@ -35,15 +34,13 @@ export class ConsumerLib {
             await this.messageProcessor.processMessage(message);
           } catch (error) {
             console.error('ConsumerLib: Failed to process message:', error);
-            // Handle message parsing or processing errors
           }
         }
       },
     );
 
-    console.log(`ConsumerLib: Started, listening on ${this.config.rabbitmq.queueA}`);
+    console.log(`ConsumerLib: Started, listening on ${this.config.rabbitmq.consumerQueue}`);
 
-    // Handle graceful shutdown
     process.on('SIGINT', async () => {
       console.log('ConsumerLib: Shutting down...');
       await this.stop();
@@ -63,5 +60,4 @@ export class ConsumerLib {
   }
 }
 
-// Export necessary types for consumers to use
 export * from './types';

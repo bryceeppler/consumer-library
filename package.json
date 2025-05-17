@@ -1,11 +1,11 @@
 {
-	"name": "consumer-lib",
-	"version": "1.0.0",
+	"name": "@eppler-software/rabbitmq-consumer",
+	"version": "1.0.1",
 	"description": "Reusable library for RabbitMQ consumers with message routing and processing",
 	"main": "dist/index.js",
 	"types": "dist/index.d.ts",
 	"scripts": {
-	  "build": "tsc -p lib.tsconfig.json"
+	  "build": "tsc"
 	},
 	"keywords": [
 	  "rabbitmq",
@@ -13,7 +13,7 @@
 	  "library",
 	  "typescript"
 	],
-	"author": "",
+	"author": "Eppler Software",
 	"license": "ISC",
 	"dependencies": {
 	  "amqplib": "^0.10.8"
@@ -21,6 +21,9 @@
 	"devDependencies": {
 	  "@types/amqplib": "^0.10.7",
 	  "typescript": "^5.8.3"
-	}
+	},
+	"files": [
+		"dist"
+	]
   }
   
