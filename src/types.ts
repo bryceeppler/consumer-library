@@ -1,23 +1,10 @@
-import { RabbitMQService } from "./rabbitmq-service";
+import { ConsumeMessage } from 'amqplib';
 
-export interface RabbitMQConfig {
+export type MessageHandler<T = any> = (msg: T, raw: ConsumeMessage) => Promise<void> | void;
+
+export interface RabbitMQOptions {
   url: string;
-  consumerQueue: string;
-  queuesToAssert: string[];
-}
-
-export interface BaseMessage {
-  type: string;
-  [key: string]: any;
-}
-
-export type MessageHandlerFn<T extends BaseMessage> = (
-  message: T,
-  services: {
-    rabbitMQService: RabbitMQService;
-  }
-) => Promise<void>;
-
-export interface MessageHandlers {
-  [messageType: string]: MessageHandlerFn<any>;
+  prefetch?: number;
+  reconnectTimeoutMs?: number;
+  logger?: (...args: any[]) => void;
 }
