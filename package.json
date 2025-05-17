@@ -1,6 +1,6 @@
 {
 	"name": "@snapstack/rabbitmq",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "A simple TypeScript RabbitMQ wrapper for microservices.",
 	"main": "dist/index.js",
 	"module": "dist/index.mjs",
@@ -8,7 +8,7 @@
 	"exports": {
 		"import": "./dist/index.mjs",
 		"require": "./dist/index.js"
-	  },
+	},
 	"scripts": {
 		"build": "tsup"
 	},
