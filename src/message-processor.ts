@@ -22,7 +22,7 @@ export class MessageProcessor {
     }
 
     try {
-      await handler(message, {
+      await handler(message as BaseMessage, {
         rabbitMQService: this.rabbitMQService,
       });
     } catch (error) {

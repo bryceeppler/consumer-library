@@ -1,6 +1,6 @@
 {
 	"name": "@eppler-software/rabbitmq-consumer",
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"description": "Reusable library for RabbitMQ consumers with message routing and processing",
 	"main": "dist/index.js",
 	"types": "dist/index.d.ts",
