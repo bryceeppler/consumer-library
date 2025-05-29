@@ -1,5 +1,5 @@
-import amqp, { Channel, ChannelModel } from 'amqplib';
-import { RabbitMQOptions, MessageHandler } from './types';
+import amqp, { Channel, ChannelModel } from "amqplib";
+import { RabbitMQOptions, MessageHandler } from "./types";
 
 export class RabbitMQ {
   private connection: ChannelModel | null = null;
@@ -23,13 +23,13 @@ export class RabbitMQ {
       this.logger(`[RabbitMQ] Connecting to ${this.url}...`);
       this.connection = await amqp.connect(this.url);
 
-      this.connection.on('error', (err) => {
-        this.logger('[RabbitMQ] Connection error', err);
+      this.connection.on("error", (err) => {
+        this.logger("[RabbitMQ] Connection error", err);
         this.reconnect();
       });
 
-      this.connection.on('close', () => {
-        this.logger('[RabbitMQ] Connection closed');
+      this.connection.on("close", () => {
+        this.logger("[RabbitMQ] Connection closed");
         this.reconnect();
       });
 
@@ -41,9 +41,9 @@ export class RabbitMQ {
 
       this.isConnected = true;
       this.reconnectAttempts = 0;
-      this.logger('[RabbitMQ] Connected and channel created');
+      this.logger("[RabbitMQ] Connected and channel created");
     } catch (err) {
-      this.logger('[RabbitMQ] Connection failed, retrying...', err);
+      this.logger("[RabbitMQ] Connection failed, retrying...", err);
       this.reconnect();
     }
   }
@@ -51,7 +51,10 @@ export class RabbitMQ {
   private async reconnect() {
     this.isConnected = false;
     this.reconnectAttempts++;
-    const delay = Math.min(this.reconnectTimeout * 2 ** this.reconnectAttempts, 30000);
+    const delay = Math.min(
+      this.reconnectTimeout * 2 ** this.reconnectAttempts,
+      30000
+    );
     const jitter = Math.random() * 1000;
     setTimeout(() => this.connect(), delay + jitter);
   }
@@ -64,15 +67,27 @@ export class RabbitMQ {
     await this.channel?.assertQueue(queue, { durable: true });
   }
 
-  async assertExchange(name: string, type: 'fanout' | 'direct' | 'topic' = 'fanout') {
+  async assertExchange(
+    name: string,
+    type: "fanout" | "direct" | "topic" = "fanout"
+  ) {
     await this.channel?.assertExchange(name, type, { durable: true });
   }
 
-  async bindQueue(queue: string, exchange: string, pattern = '') {
+  async bindQueue(queue: string, exchange: string, pattern = "") {
     await this.channel?.bindQueue(queue, exchange, pattern);
   }
 
-  async publish(exchange: string, routingKey: string, message: object) {
+  async publishToQueue(queue: string, message: object) {
+    const payload = Buffer.from(JSON.stringify(message));
+    this.channel?.sendToQueue(queue, payload);
+  }
+
+  async publishToExchange(
+    exchange: string,
+    routingKey: string,
+    message: object
+  ) {
     const payload = Buffer.from(JSON.stringify(message));
     this.channel?.publish(exchange, routingKey, payload);
   }
@@ -87,7 +102,7 @@ export class RabbitMQ {
         await handler(data, msg);
         this.channel?.ack(msg);
       } catch (err) {
-        this.logger('[RabbitMQ] Error handling message', err);
+        this.logger("[RabbitMQ] Error handling message", err);
         this.channel?.nack(msg, false, false); // drop message
       }
     });
@@ -98,7 +113,7 @@ export class RabbitMQ {
       await this.channel?.close();
       await this.connection?.close();
     } catch (err) {
-      this.logger('[RabbitMQ] Error closing connection', err);
+      this.logger("[RabbitMQ] Error closing connection", err);
     }
   }
 }
